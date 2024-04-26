@@ -8,6 +8,20 @@
       "when": 1714170677932,
       "tag": "0000_needy_falcon",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1714170849229,
+      "tag": "0001_cool_korvac",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1714171310332,
+      "tag": "0002_panoramic_imperial_guard",
+      "breakpoints": true
     }
   ]
 }
