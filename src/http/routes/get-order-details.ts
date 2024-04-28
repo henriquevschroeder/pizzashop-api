@@ -2,11 +2,10 @@ import Elysia, { t } from 'elysia'
 import { auth } from '../auth'
 import { UnauthorizedError } from '../errors/unauthorized-error'
 import { db } from '../../db/connection'
-import { OrderNotFoundError } from '../errors/order-not-found-error'
 
 export const getOrderDetails = new Elysia().use(auth).get(
   '/orders/:orderId',
-  async ({ getCurrentUser, params }) => {
+  async ({ getCurrentUser, params, set }) => {
     const { orderId } = params
     const { restaurantId } = await getCurrentUser()
 
@@ -50,7 +49,8 @@ export const getOrderDetails = new Elysia().use(auth).get(
     })
 
     if (!order) {
-      throw new OrderNotFoundError()
+      set.status = 400
+      return { message: 'Order not found' }
     }
 
     return order
