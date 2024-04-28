@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm'
 
 export const authenticateFromLink = new Elysia().use(auth).get(
   '/auth-links/authenticate',
-  async ({ query, jwt: { sign }, cookie: { authCookie }, set }) => {
+  async ({ query, set, signUser }) => {
     const { code, redirect } = query
 
     const authLinkFromCode = await db.query.authLinks.findFirst({
@@ -35,15 +35,10 @@ export const authenticateFromLink = new Elysia().use(auth).get(
       },
     })
 
-    const jwt = await sign({
+    await signUser({
       sub: authLinkFromCode.userId,
       restaurantId: managedRestaurant?.id,
     })
-
-    authCookie.value = jwt
-    authCookie.httpOnly = true
-    authCookie.maxAge = 60 * 60 * 24 * 7 // 7 days
-    authCookie.path = '/'
 
     await db.delete(authLinks).where(eq(authLinks.code, code))
 

@@ -3,6 +3,6 @@ import { auth } from '../auth'
 
 export const signOut = new Elysia()
   .use(auth)
-  .post('/sign-out', async ({ cookie: { authCookie } }) => {
-    authCookie.remove()
+  .post('/sign-out', async ({ signOutUser }) => {
+    signOutUser()
   })
