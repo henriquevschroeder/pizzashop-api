@@ -1,4 +1,5 @@
 import { Elysia } from 'elysia'
+import { swagger } from '@elysiajs/swagger'
 import { registerRestaurant } from './routes/register-restaurant'
 import { sendAuthLink } from './routes/send-auth-link'
 import { authenticateFromLink } from './routes/authenticate-from-link'
@@ -19,6 +20,17 @@ import { getPopularProducts } from './routes/get-popular-products'
 import { getDailyRevenueInPeriod } from './routes/get-daily-revenue-in-period'
 
 const app = new Elysia()
+  .use(
+    swagger({
+      path: '/docs',
+      documentation: {
+        info: {
+          title: 'PizzaShop API Documentation',
+          version: '1.0.0',
+        },
+      },
+    }),
+  )
   .use(registerRestaurant)
   .use(sendAuthLink)
   .use(authenticateFromLink)
