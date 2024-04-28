@@ -1,8 +1,10 @@
 import Elysia, { t } from 'elysia'
+import nodemailer from 'nodemailer'
 import { db } from '../../db/connection'
 import { createId } from '@paralleldrive/cuid2'
 import { authLinks } from '../../db/schema'
 import { env } from '../../env'
+import { mail } from '../../lib/mail'
 
 export const sendAuthLink = new Elysia().post(
   '/authenticate',
@@ -30,8 +32,17 @@ export const sendAuthLink = new Elysia().post(
     authLink.searchParams.set('code', authLinkCode)
     authLink.searchParams.set('redirect', env.AUTH_REDIRECT_URL)
 
-    // Here, we could send an e-mail with auth link
-    console.log(authLink.toString())
+    const sentMail = await mail.sendMail({
+      from: {
+        name: 'Pizza Shop',
+        address: 'hi@pizzashop.com',
+      },
+      to: email,
+      subject: 'Sign in to Pizza Shop',
+      text: `Click the link below to sign in to Pizza Shop:\n\n${authLink.toString()}`,
+    })
+
+    console.log(nodemailer.getTestMessageUrl(sentMail))
   },
   {
     body: t.Object({
