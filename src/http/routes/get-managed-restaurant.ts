@@ -1,6 +1,7 @@
 import Elysia from 'elysia'
 import { auth } from '../auth'
 import { db } from '../../db/connection'
+import { UnauthorizedError } from '../errors/unauthorized-error'
 
 export const getManagedRestaurant = new Elysia()
   .use(auth)
@@ -8,7 +9,7 @@ export const getManagedRestaurant = new Elysia()
     const { restaurantId } = await getCurrentUser()
 
     if (!restaurantId) {
-      throw new Error('User is not a manager.')
+      throw new UnauthorizedError()
     }
 
     const restaurant = await db.query.restaurants.findFirst({
